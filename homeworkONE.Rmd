@@ -1,0 +1,120 @@
+---
+title: "HWone"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Question 1:
+
+### Define supervised and unsupervised learning. What are the difference(s) between them?
+
+For supervised learning each predictor will have an associated response variable in order to relate the response to the predictors (textbook,26). In other terms the key difference is that the data we have for "Y" or the response is what we would call the supervisor and the data needs to be given both the output and input (slide 30 week one). For unsupervised learning there is a vector of data but no response variable to work with, so there is no output given to the data and therefore a linear regression would not work in this case (textbook, 26). It is common to use clustering techniques here and see if there are any grouping patterns because there is no way to pinpoint a response. (slide 35 week one and page 27 of textbook).
+
+### Question two
+
+### Explain the difference between a regression model and a classification model, specifically in the context of machine learning.
+
+In machine learning we tend to use quantitative data for a regression model and qualitative data for a classification model, although it can get more complex than this. (Page 28 of textbook). In other terms this means that we use numerical values like height and weight for regression models and qualitative values like if someone passed away or not on the titanic for classification models. 
+
+### Question 3:
+
+### Name two commonly used metrics for regression ML problems. Name two commonly used metrics for classification ML problems.
+Two commonly used metrics for regression machine learning problems would be MSE and root MSE (two different functions).Two commonly used machine learning metrics for classification problems would be accuracy (correct predictions/total predictions) and f1 score which is 2xprecisionxreccall/precision+recall (professor coburn office hours friday 1-3).
+
+
+### Question 4:
+
+### As discussed, statistical models can be used for different purposes. These purposes can generally be classified into the following three categories. Provide a brief description of each.
+
+Descriptive models: Descriptive models choose a model that best showcase a trendline on the data. Probably a trend line that fits the data the best.
+
+Inferential models: The inferential model is more focused on testing theories and possibly making causal claims. It questions what features actually matter in order to explain a relationship between outcome and predictor(s).
+
+Predictive models: The predictive model works to show what combination of features fits the data the best. Its goal is to have the least reducible error when predicting y instead of showcasing a good trend line and also does not really focus on the hypothesis tests.
+
+(slide 35 week one for all of the above answers)
+
+### Question 5:
+
+### Predictive models are frequently used in machine learning, and they can usually be described as either mechanistic or empirically-driven. Answer the following questions.
+
+#### Define mechanistic. Define empirically-driven. How do these model types differ? How are they similar?
+
+The parametric/ mechanistic model will assume a parametric form for the function f(page 21 textbook). There is also room to add more parameters to get a valid level of flexibility (slide 38 week one). In contrast the empirically driven/non-parametric method will actually not make any assumptions of f or any assumptions about parameters (textbook page 23). Other minor differences for the non-parametric model is that it requires more observations than the parametric model(slide 38 lecture week one). Lastly both models can be over fitted. For the non-parametric model this trait is more inherent, however for the parametric model if one uses too many parameters they can run into this issue(slide 38 week one lecture).
+
+#### In general, is a mechanistic or empirically-driven model easier to understand? Explain your choice.
+
+From professor Coburn's office hours and some reading from the textbook I came to the conclusion that the mechanistic model is easier to understand based on its lack of layers. We commonly use linear regression for mechanistic models so most of the explaining comes from the regression graph and how x affects y. However, with the empirically driven models where we can use neural networks and the models contain many layers it becomes much harder to explain the data because of all of the different variables and how they are visually represented. 
+
+#### Describe how the bias-variance tradeoff is related to the use of mechanistic or empirically-driven models.
+
+Based on slide 61 from lecture one we see that less complex models have a higher bias and a lower variance based on the bias-variance tradeoff. Secondly we see that if the model has a higher complexity than the model will have a lower bias and a higher variance. From page 21-24 in the textbook we know that the non-parametric model is probably more complex because if can take on more parameters and that the parametric model is less complex because it commonly takes on simpler models. This means we would expect the non-parametric model to have the low bias and high variance and the parametric model to have the high bias and low variance.
+
+### Question 6:
+
+### A political candidate's campaign has collected some detailed voter history data from their constituents. The campaign is interested in two questions:
+
+#### Given a voter's profile/data, how likely is it that they will vote in favor of the candidate?
+
+#### How would a voter's likelihood of support for the candidate change if they had personal contact with the candidate?
+
+#### Classify each question as either predictive or inferential. Explain your reasoning for each.
+
+The first question is closer to the predictive model because we are essentially given all of the voter's data and then from there we would want to see which combination of those variables makes someone more likely to vote for any of the candidates. We are less focused on a specific hypothesis but more interested in how all the variables provoke a given outcome which here would be the candidate that a voter does end up choosing ( slide 39 week one).
+
+The second question I would assume is inferential because we are aiming to see if one specific predictor is significant. Here it would be if the voter does know the candidate and how this would affect their voting decisions. In this example we have a theory we wish to test and our hope is to make some claim about it at the end.  (slide 39 lecture week one).
+
+
+```{r}
+# R.Version()
+#exercise one
+library(tidyverse)
+library(ISLR)
+data(mpg)
+hist_hwy <- ggplot(mpg, aes(hwy)) + geom_histogram()
+hist_hwy
+```
+This histogram seems to be right skew and bi model. The peaks that make it bi model seem to be at 17 and 27 highway miles per gallon.
+
+```{r}
+#exercise two
+ggplot(mpg,aes(x=hwy, y=cty)) + geom_point()
+```
+There looks to be a strong positive correlation between hwy and cty so as one increases the other one should be as well. This makes sense because if your car gets good city mpg it will also get good highway mpg because a car burns more gas in the city. 
+
+```{r}
+#exercise three 
+library(forcats)
+ggplot(mpg,aes(y=(fct_infreq(manufacturer)))) + geom_bar()
+```
+Due to the fact that this barplot is ordered by height it makes it very easy for the viewer to tell that lincoln manufactured the least amount of cars while dodge manufactured the most amount of cars.
+
+```{r}
+#exercise four 
+#Make a box plot of hwy, grouped by cyl. Do you see a pattern? If so, what?
+bp <- ggplot(mpg, aes(group = cyl ,x=hwy,y=cyl)) + geom_boxplot()
+bp
+
+```
+ The pattern here seems to be that the relationship between cyl and hwy is generally decreasing with some minor bumps in the pattern. This can by explained by the fact that if a car has more cylinders then it has a higher horse power which means the car will burn more gas. That explains the pattern we see between cyl and hwy because the more cylinders a car has the more gas it burns through horsepower and the worse mileage it will have. 
+
+```{r}
+#exercise 5
+library(tidyverse)
+data(mpg)
+?mpg
+# install.packages('corrplot')
+library(corrplot)
+mpg_fixed <- c('displ','cyl','cty','hwy','year')
+newdata <- mpg[,mpg_fixed]
+newdata
+corrplot(cor(newdata),method='number',type='lower')
+```
+There is a strong positive correlation between cylinders and engine displacement.This does not surprise me because of the research I did for exercise 4. Engine displacement has to do with how big and strong the engine is and it is based on how much volume the cylinders take up in the engine. This means that an engine with more cylinders will be stronger and bigger explaining the positive correlation here. There is a decently strong negative correlation between city mpg and engine displacement. This also does not surprise me because good city mpg requires less horsepower so the better city mpg a car has the smaller the engine should be(less cylinders less horsepower less gas burned) with less horsepower. There is also a decently strong negative correlation between city mpg and cylinders. Again based on the last observation this does not surprise me because if a car has good city mileage or good mileage in general the engine should have less cylinders increasing its mileage benefits. There is also a decently strong negative correlation between highway mpg and engine displacement and highway mpg and cylinders. These both also do not surprise me because if you have good highway mpg you would in theory have a smaller engine with less cylinders and less engine displacement. There is also a strong positive correlation between highway mpg and city mpg. This correlation makes sense because if a car has good mileage in the city it should have even better mileage on the highway because city mpg burns more gas than highway mpg. The last correlation on this graph is the year but none of the correlation numbers are strong enough to indicate any meaningful relationships which makes sense because the year is just when the car was made which shouldn't really affect the engine construction.
+
+
+
